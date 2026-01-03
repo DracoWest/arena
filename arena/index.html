@@ -173,13 +173,6 @@
       min-height:18px;
     }
     .status.bad{color:var(--danger)}
-    .foot{
-      margin-top:16px;
-      color:#95a9cf;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size:12px;
-      opacity:0.9;
-    }
   </style>
 </head>
 <body>
@@ -203,10 +196,10 @@
           <option value="">All areas</option>
         </select>
       </div>
-<div class="controlRow">
-  <button class="btn" id="zeroVisibleBtn">Zero visible</button>
+      <div class="controlRow">
+        <button class="btn" id="zeroVisibleBtn">Zero visible</button>
 </div>
-
+    </div>
 
     <div class="panel">
       <div style="max-height:72vh; overflow:auto;">
@@ -1553,7 +1546,7 @@
     </div>
 
     <div class="status" id="status"></div>
-  </div>
+</div>
 
 <script>
   const STATUS = document.getElementById('status');
@@ -1732,36 +1725,6 @@
     flushPending();
   });
 
-  // Export/Import
-  document.getElementById('exportBtn').addEventListener('click', () => {
-    const obj = {};
-    for (const tr of document.querySelectorAll('tbody tr')) {
-      obj[tr.dataset.id] = Number(tr.querySelector('.tallyInput').value || '0');
-    }
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'monster_arena_tallies.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
-  document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
-  document.getElementById('importFile').addEventListener('change', async (ev) => {
-    const f = ev.target.files[0];
-    if (!f) return;
-    try {
-      const txt = await f.text();
-      const obj = JSON.parse(txt);
-      for (const tr of document.querySelectorAll('tbody tr')) {
-        const id = tr.dataset.id;
-        if (typeof obj[id] === 'number') tr.querySelector('.tallyInput').value = String(obj[id]);
-      }
-      setStatus('Imported. Saving…');
-      document.getElementById('saveAllBtn').click();
-    } catch (e) {
-      setStatus('Import failed. Bad JSON.', true);
-    }
-  });
 
   // Initial load
   (async function boot(){
