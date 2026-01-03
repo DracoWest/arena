@@ -173,6 +173,39 @@
       min-height:18px;
     }
     .status.bad{color:var(--danger)}
+ /* --- Mobile portrait: keep table from overflowing horizontally --- */
+@media (max-width: 520px) {
+  body { padding: 16px 10px; }
+  .wrap { max-width: 100%; }
+
+  /* Header / controls stack nicer */
+  .header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .right { justify-content: flex-start; }
+  .controls { gap: 8px; }
+  .controlRow { width: 100%; }
+  input[type="text"], select { min-width: 0; width: 100%; }
+
+  /* Make the table fit the viewport */
+  table { width: 100%; table-layout: fixed; }
+  thead th, tbody td { padding: 8px 6px; font-size: 11px; }
+
+  /* Column widths (must add to 100%) */
+  th:nth-child(1), td:nth-child(1) { width: 18%; } /* Area */
+  th:nth-child(2), td:nth-child(2) { width: 22%; } /* Monster */
+  th:nth-child(3), td:nth-child(3) { width: 18%; } /* Type */
+  th:nth-child(4), td:nth-child(4) { width: 28%; } /* Location */
+  th:nth-child(5), td:nth-child(5) { width: 14%; } /* Tally */
+
+  /* Allow wrapping so it doesn’t force sideways scroll */
+  td.lock { white-space: normal; overflow-wrap: anywhere; word-break: break-word; }
+
+  /* Tighten tally controls */
+  td.tally { width: auto; }
+  .tallyControls { gap: 4px; justify-content: flex-end; }
+  .tallyBtn { width: 26px; height: 26px; border-radius: 8px; font-size: 14px; padding: 0; }
+  .tallyInput { width: 40px; padding: 6px 4px; font-size: 12px; }
+}
+
   </style>
 </head>
 <body>
