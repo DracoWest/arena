@@ -310,17 +310,26 @@
     COUNT.textContent = `${vis} / ${total} shown`;
   }
 
-  function applyFilters() {
-    const q = document.getElementById('search').value.trim().toLowerCase();
-    const area = document.getElementById('areaFilter').value;
-    for (const tr of document.querySelectorAll('tbody tr')) {
-      const hay = (tr.innerText || '').toLowerCase();
-      const okQ = !q || hay.includes(q);
-      const okA = !area || tr.dataset.area === area;
-      tr.style.display = (okQ && okA) ? '' : 'none';
-    }
-    updateCountPill();
+function applyFilters() {
+  const q = document.getElementById('search').value.trim().toLowerCase();
+  const area = document.getElementById('areaFilter').value;
+
+  for (const tr of document.querySelectorAll('tbody tr')) {
+    // Only search the "locked" text cells, not the tally buttons/input
+    const lockedText = Array.from(tr.querySelectorAll('td.lock'))
+      .map(td => td.textContent || '')
+      .join(' ')
+      .toLowerCase();
+
+    const okQ = !q || lockedText.includes(q);
+    const okA = !area || tr.dataset.area === area;
+
+    tr.style.display = (okQ && okA) ? '' : 'none';
   }
+
+  updateCountPill();
+}
+
 
   document.getElementById('search').addEventListener('input', applyFilters);
   document.getElementById('areaFilter').addEventListener('change', applyFilters);
