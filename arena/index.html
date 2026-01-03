@@ -196,9 +196,7 @@
           <option value="">All areas</option>
         </select>
       </div>
-      <div class="controlRow">
-        <button class="btn" id="zeroVisibleBtn">Zero visible</button>
-</div>
+     
     </div>
 
     <div class="panel">
@@ -1714,17 +1712,6 @@
       setStatus('Save-all failed.', true);
     }
   });
-
-  document.getElementById('zeroVisibleBtn').addEventListener('click', () => {
-    for (const tr of visibleRows()) {
-      const input = tr.querySelector('.tallyInput');
-      input.value = '0';
-      pending.set(tr.dataset.id, 0);
-    }
-    setStatus('Zeroed visible. Saving…');
-    flushPending();
-  });
-
 
   // Initial load
   (async function boot(){
