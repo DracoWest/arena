@@ -1,575 +1,167 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dracowest | Monster Arena Checklist</title>
-  <style>
-    :root {
-      --bg0:#06070a;
-      --bg1:#0b0f16;
-      --panel:#0f1623cc;
-      --line:#2b3e5a;
-      --gold:#b99a61;
-      --text:#d9e6ff;
-      --muted:#9bb0d6;
-      --danger:#ff6b6b;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-serif, Georgia, "Times New Roman", serif;
-      background:
-        radial-gradient(1200px 600px at 50% 0%, #0b1630 0%, transparent 55%),
-        radial-gradient(900px 500px at 20% 40%, #0a2a3a22 0%, transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg0));
-      color:var(--text);
-      min-height:100vh;
-      padding:28px 18px;
-    }
-    .wrap{max-width:1100px;margin:0 auto}
-    .header{
-      display:flex;gap:14px;align-items:flex-end;justify-content:space-between;
-      border:1px solid #ffffff12;
-      background:linear-gradient(180deg, #0f1726cc, #0b0f16cc);
-      box-shadow:0 18px 60px #00000066;
-      padding:18px 18px 14px 18px;
-      border-radius:16px;
-    }
-    .title{
-      letter-spacing:0.08em;
-      text-transform:uppercase;
-      font-size:26px;
-      color:var(--gold);
-      margin:0;
-    }
-    .sub{
-      margin:6px 0 0 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--muted);
-      font-size:13px;
-    }
-    .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
-    .pill{
-      border:1px solid #ffffff14;
-      background:#0c1220;
-      padding:8px 10px;
-      border-radius:999px;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .btn{
-      border:1px solid #ffffff18;
-      background:linear-gradient(180deg, #1a263d, #0e1422);
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-weight:600;
-    }
-    .btn:hover{border-color:#ffffff28}
-    .btn.gold{
-      background:linear-gradient(180deg, #c3a46a, #9f814c);
-      color:#0b0f16;
-      border-color:#00000033;
-    }
-    .controls{
-      margin-top:14px;
-      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
-    }
-    .controlRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    input[type="text"], select{
-      border:1px solid #ffffff18;
-      background:#0c1220;
-      color:var(--text);
-      padding:10px 12px;
-      border-radius:12px;
-      outline:none;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      min-width:220px;
-    }
-    .panel{
-      margin-top:14px;
-      border:1px solid #ffffff12;
-      background:linear-gradient(180deg, #0f1726cc, #0b0f16cc);
-      box-shadow:0 18px 60px #00000066;
-      border-radius:16px;
-      overflow:hidden;
-    }
-    table{
-      width:100%;
-      border-collapse:separate;
-      border-spacing:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size:13px;
-    }
-    thead th{
-      position:sticky; top:0;
-      background:#0b1322;
-      color:var(--gold);
-      text-transform:uppercase;
-      letter-spacing:0.08em;
-      font-size:12px;
-      padding:12px 10px;
-      border-bottom:1px solid #ffffff14;
-      z-index:2;
-    }
-    tbody td{
-      padding:10px 10px;
-      border-bottom:1px solid #ffffff0f;
-      vertical-align:top;
-    }
-    tbody tr:hover td{background:#0a1323}
-    td.lock{color:#d6e4ff}
-    td.tally{width:140px}
-/* Tally +/- controls */
-.tallyControls{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  justify-content:flex-end;
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Dracowest | Monster Arena Checklist</title>
+
+<style>
+:root{
+  --bg0:#06070a;--bg1:#0b0f16;--gold:#b99a61;
+  --text:#d9e6ff;--muted:#9bb0d6;--danger:#ff6b6b;
 }
-.tallyBtn{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  border:1px solid #ffffff18;
-  background:linear-gradient(180deg, #1a263d, #0e1422);
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Georgia,serif;
+  background:linear-gradient(180deg,var(--bg1),var(--bg0));
   color:var(--text);
-  cursor:pointer;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  font-weight:800;
-  line-height:1;
-  user-select:none;
+  padding:28px 18px;
 }
-.tallyBtn:hover{border-color:#ffffff28}
-.tallyBtn:active{transform:translateY(1px)}
-.tallyBtn.plus{
-  border-color:#00000033;
-  background:linear-gradient(180deg, #c3a46a, #9f814c);
-  color:#0b0f16;
+.wrap{max-width:1100px;margin:auto}
+.header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  background:#0f1726;border-radius:16px;padding:18px;
 }
+.title{color:var(--gold);letter-spacing:.08em;margin:0}
+.sub{font-size:13px;color:var(--muted)}
 
-/* Keep your existing .tallyInput styles, but make it fit with buttons */
+.controls{
+  display:flex;justify-content:space-between;flex-wrap:wrap;
+  margin:14px 0;gap:10px
+}
+input,select{
+  background:#0c1220;color:var(--text);
+  border:1px solid #ffffff18;border-radius:12px;
+  padding:10px 12px;min-width:220px
+}
+.btn{
+  background:#1a263d;color:var(--text);
+  border:1px solid #ffffff18;border-radius:12px;
+  padding:10px 14px;font-weight:600;cursor:pointer
+}
+.btn.gold{background:#c3a46a;color:#0b0f16}
+
+.panel{background:#0b1322;border-radius:16px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:10px;border-bottom:1px solid #ffffff10}
+th{color:var(--gold);text-transform:uppercase;font-size:12px}
+td.lock{color:#d6e4ff}
+
+td.tally{width:140px}
+.tallyControls{display:flex;justify-content:flex-end;gap:8px}
+.tallyBtn{
+  width:34px;height:34px;border-radius:10px;
+  border:1px solid #ffffff18;background:#1a263d;
+  color:var(--text);font-weight:800;cursor:pointer
+}
+.tallyBtn.plus{background:#c3a46a;color:#0b0f16}
 .tallyInput{
-  width:52px; /* key */
+  width:52px;text-align:center;font-weight:700;
+  background:#0f1a2f;color:var(--text);
+  border:1px solid #ffffff18;border-radius:10px
 }
 
-    /* Tally controls */
-    .tallyControls{
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .tallyBtn{
-      width:34px;
-      height:34px;
-      border-radius:10px;
-      border:1px solid #ffffff18;
-      background:linear-gradient(180deg, #1a263d, #0e1422);
-      color:var(--text);
-      cursor:pointer;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-weight:800;
-      line-height:1;
-      user-select:none;
-    }
-    .tallyBtn:hover{border-color:#ffffff28}
-    .tallyBtn:active{transform:translateY(1px)}
-    .tallyBtn.plus{
-      border-color:#00000033;
-      background:linear-gradient(180deg, #c3a46a, #9f814c);
-      color:#0b0f16;
-    }
-
-    .tallyInput{
-      width:52px;
-      padding:8px 10px;
-      border-radius:10px;
-      border:1px solid #ffffff18;
-      background:linear-gradient(180deg, #0f1a2f, #0a1020);
-      color:var(--text);
-      outline:none;
-      font-weight:700;
-      text-align:center;
-    }
-    .tallyInput:focus{border-color:var(--gold); box-shadow:0 0 0 3px #b99a6122}
-
-    .status{
-      margin-top:10px;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      color:var(--muted);
-      font-size:12px;
-      min-height:18px;
-    }
-    .status.bad{color:var(--danger)}
-    .foot{
-      margin-top:16px;
-      color:#95a9cf;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      font-size:12px;
-      opacity:0.9;
-    }
-  </style>
+.status{margin-top:10px;font-size:12px;color:var(--muted)}
+.status.bad{color:var(--danger)}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="header">
-      <div>
-        <h1 class="title">Monster Arena Checklist</h1>
-        <p class="sub">Editable: <b>Tally</b> only. Syncs across your phone and browsers.</p>
-      </div>
-      <div class="right">
-        <span class="pill" id="countPill">Loading…</span>
-        <button class="btn" id="refreshBtn">Refresh</button>
-        <button class="btn gold" id="saveAllBtn">Save All</button>
-      </div>
+<div class="wrap">
+  <div class="header">
+    <div>
+      <h1 class="title">Monster Arena Checklist</h1>
+      <div class="sub">Editable: Tally only</div>
     </div>
-
-    <div class="controls">
-      <div class="controlRow">
-        <input id="search" type="text" placeholder="Search monsters, areas, types…" />
-        <select id="areaFilter">
-          <option value="">All areas</option>
-        </select>
-      </div>
-      <div class="controlRow">
-        <button class="btn" id="zeroVisibleBtn">Zero visible</button>
-        <button class="btn" id="exportBtn">Export tallies</button>
-        <button class="btn" id="importBtn">Import tallies</button>
-        <input id="importFile" type="file" accept="application/json" style="display:none" />
-      </div>
+    <div>
+      <span id="countPill">Loading…</span>
+      <button class="btn" id="refreshBtn">Refresh</button>
+      <button class="btn gold" id="saveAllBtn">Save All</button>
     </div>
-
-    <div class="panel">
-      <div style="max-height:72vh; overflow:auto;">
-        <table id="tbl">
-          <thead>
-            <tr>
-              <th>Area</th>
-              <th>Monster</th>
-              <th>Type</th>
-              <th>Location</th>
-              <th>Creations</th>
-              <th>Tally</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- NOTE: I’m showing a few rows as examples. Keep the rest of your rows exactly the same pattern. -->
-            <tr data-id="besaid|dingo" data-area="Besaid">
-              <td class="lock">Besaid</td>
-              <td class="lock">Dingo</td>
-              <td class="lock">Lupine</td>
-              <td class="lock">Anywhere fiends appear</td>
-              <td class="lock">Need 3 for&nbsp;Fenrir</td>
-              <td class="tally">
-                <div class="tallyControls">
-                  <button class="tallyBtn minus" type="button" aria-label="Decrement">−</button>
-                  <input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" />
-                  <button class="tallyBtn plus" type="button" aria-label="Increment">+</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-id="besaid|condor" data-area="Besaid">
-              <td class="lock">Besaid</td>
-              <td class="lock">Condor</td>
-              <td class="lock">Small Bird</td>
-              <td class="lock">Anywhere fiends appear</td>
-              <td class="lock">Need 5 for Pteryx</td>
-              <td class="tally">
-                <div class="tallyControls">
-                  <button class="tallyBtn minus" type="button" aria-label="Decrement">−</button>
-                  <input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" />
-                  <button class="tallyBtn plus" type="button" aria-label="Increment">+</button>
-                </div>
-              </td>
-            </tr>
-
-            <tr data-id="besaid|water_flan" data-area="Besaid">
-              <td class="lock">Besaid</td>
-              <td class="lock">Water Flan</td>
-              <td class="lock">Flan</td>
-              <td class="lock">Anywhere fiends appear</td>
-              <td class="lock">Need 3 for Jumbo Flan</td>
-              <td class="tally">
-                <div class="tallyControls">
-                  <button class="tallyBtn minus" type="button" aria-label="Decrement">−</button>
-                  <input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" />
-                  <button class="tallyBtn plus" type="button" aria-label="Increment">+</button>
-                </div>
-              </td>
-            </tr>
-
-            <!-- Keep ALL your remaining rows, but change each tally cell
-                 from: <td class="tally"><input ... class="tallyInput" ...></td>
-                 to the tallyControls block above. -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="status" id="status"></div>
-    <div class="foot">Tip: changes autosave after you stop typing for a second. “Save All” forces a full sync.</div>
   </div>
+
+  <div class="controls">
+    <div>
+      <input id="search" placeholder="Search monsters, areas, types…" />
+      <select id="areaFilter"><option value="">All areas</option></select>
+    </div>
+    <div>
+      <button class="btn" id="zeroVisibleBtn">Zero visible</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th>Area</th>
+          <th>Monster</th>
+          <th>Type</th>
+          <th>Location</th>
+          <th>Tally</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- KEEP ALL YOUR EXISTING ROWS -->
+        <!-- Only change the LAST <td> to class="tally" -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="status" id="status"></div>
+</div>
 
 <script>
-  const STATUS = document.getElementById('status');
-  const COUNT = document.getElementById('countPill');
+const STATUS=document.getElementById('status');
+const COUNT=document.getElementById('countPill');
+const pending=new Map();
 
-  const debounce = (fn, ms) => {
-    let t;
-    return (...args) => {
-      clearTimeout(t);
-      t = setTimeout(() => fn(...args), ms);
-    };
-  };
+function setStatus(t,b=false){STATUS.textContent=t;STATUS.className=b?'status bad':'status'}
+function visibleRows(){return [...document.querySelectorAll('tbody tr')].filter(r=>r.style.display!=='none')}
+function updateCount(){COUNT.textContent=`${visibleRows().length} / ${document.querySelectorAll('tbody tr').length} shown`}
 
-  function setStatus(msg, bad=false) {
-    STATUS.textContent = msg;
-    STATUS.className = bad ? 'status bad' : 'status';
-  }
-
-  function visibleRows() {
-    return Array.from(document.querySelectorAll('tbody tr')).filter(tr => tr.style.display !== 'none');
-  }
-
-  function updateCountPill() {
-    const total = document.querySelectorAll('tbody tr').length;
-    const vis = visibleRows().length;
-    COUNT.textContent = `${vis} / ${total} shown`;
-  }
-
-function applyFilters() {
-  const q = document.getElementById('search').value.trim().toLowerCase();
-  const area = document.getElementById('areaFilter').value;
-
-  for (const tr of document.querySelectorAll('tbody tr')) {
-    // Only search the "locked" text cells, not the tally buttons/input
-    const lockedText = Array.from(tr.querySelectorAll('td.lock'))
-      .map(td => td.textContent || '')
-      .join(' ')
-      .toLowerCase();
-
-    const okQ = !q || lockedText.includes(q);
-    const okA = !area || tr.dataset.area === area;
-
-    tr.style.display = (okQ && okA) ? '' : 'none';
-  }
-
-  updateCountPill();
+function applyFilters(){
+  const q=search.value.toLowerCase(),a=areaFilter.value;
+  document.querySelectorAll('tbody tr').forEach(tr=>{
+    const text=[...tr.querySelectorAll('td.lock')].map(td=>td.textContent).join(' ').toLowerCase();
+    tr.style.display=(!q||text.includes(q))&&(!a||tr.dataset.area===a)?'':'none';
+  });
+  updateCount();
 }
 
+search.oninput=applyFilters;
+areaFilter.onchange=applyFilters;
 
-  document.getElementById('search').addEventListener('input', applyFilters);
-  document.getElementById('areaFilter').addEventListener('change', applyFilters);
+(function initAreas(){
+  [...new Set([...document.querySelectorAll('tbody tr')].map(tr=>tr.dataset.area))]
+  .sort().forEach(a=>areaFilter.add(new Option(a,a)));
+  updateCount();
+})();
 
-  // Build area filter options
-  (function initAreas(){
-    const areas = new Set(Array.from(document.querySelectorAll('tbody tr')).map(tr => tr.dataset.area));
-    const sel = document.getElementById('areaFilter');
-    Array.from(areas).sort().forEach(a => {
-      const opt = document.createElement('option');
-      opt.value = a;
-      opt.textContent = a;
-      sel.appendChild(opt);
-    });
-    updateCountPill();
-  })();
-
-  // ---- Sync layer (Cloudflare Pages Functions -> Supabase) ----
-  async function fetchTallies() {
-    setStatus('Syncing from cloud…');
-    const res = await fetch('/api/arena/tallies', { credentials:'include' });
-    if (!res.ok) throw new Error('Fetch failed');
-    return await res.json();
-  }
-
-  async function saveOne(monster_id, tally) {
-    const res = await fetch('/api/arena/tally', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      credentials:'include',
-      body: JSON.stringify({ monster_id, tally })
-    });
-    if (!res.ok) throw new Error('Save failed');
-  }
-
-  async function saveMany(items) {
-    const res = await fetch('/api/arena/tallies', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      credentials:'include',
-      body: JSON.stringify({ items })
-    });
-    if (!res.ok) throw new Error('Save-all failed');
-  }
-
-  function applyTallies(map) {
-    for (const tr of document.querySelectorAll('tbody tr')) {
-      const id = tr.dataset.id;
-      const v = map[id];
-      if (typeof v === 'number') {
-        const input = tr.querySelector('.tallyInput');
-        if (input) input.value = String(v);
-      }
-    }
-  }
-
-  let pending = new Map(); // monster_id -> tally
-  const flushPending = debounce(async () => {
-    if (pending.size === 0) return;
-    const items = Array.from(pending.entries()).map(([monster_id, tally]) => ({ monster_id, tally }));
-    pending.clear();
-    try {
-      await saveMany(items);
-      setStatus('Saved.');
-    } catch (e) {
-      setStatus('Save failed. Check your connection.', true);
-    }
-  }, 900);
-
-  // Input wiring (typing still works)
-  function wireInputs() {
-    for (const input of document.querySelectorAll('.tallyInput')) {
-      if (input.dataset.wired === '1') continue;
-      input.dataset.wired = '1';
-
-      input.addEventListener('input', (ev) => {
-        const tr = ev.target.closest('tr');
-        const id = tr.dataset.id;
-        const raw = String(ev.target.value || '').replace(/[^0-9]/g,'');
-        ev.target.value = raw || '0';
-        const val = Number(ev.target.value || '0');
-        pending.set(id, val);
-        setStatus('Typing…');
-        flushPending();
-      });
-    }
-  }
-function upgradeTallyCells() {
-  for (const tr of document.querySelectorAll('tbody tr')) {
-    const td = tr.querySelector('td.tally');
-    if (!td) continue;
-
-    // Skip if already upgraded
-    if (td.querySelector('.tallyControls')) continue;
-
-    const input = td.querySelector('.tallyInput');
-    if (!input) continue;
-
-    const value = input.value || '0';
-td.innerHTML = `
-  <div class="tallyControls">
-    <button class="tallyBtn minus" type="button">−</button>
-    <input class="tallyInput" inputmode="numeric" value="${value}" />
-    <button class="tallyBtn plus" type="button">+</button>
-  </div>
-`;
-  }
+function upgradeTallies(){
+  document.querySelectorAll('td.tally').forEach(td=>{
+    if(td.querySelector('.tallyControls'))return;
+    td.innerHTML=`
+      <div class="tallyControls">
+        <button class="tallyBtn minus">−</button>
+        <input class="tallyInput" value="0"/>
+        <button class="tallyBtn plus">+</button>
+      </div>`;
+  });
 }
 
-upgradeTallyCells();
-wireInputs();
+document.addEventListener('click',e=>{
+  const btn=e.target.closest('.tallyBtn');
+  if(!btn)return;
+  const input=btn.closest('.tallyControls').querySelector('.tallyInput');
+  let v=Number(input.value)||0;
+  if(btn.classList.contains('plus'))v++;
+  if(btn.classList.contains('minus'))v=Math.max(0,v-1);
+  input.value=v;
+});
 
-
-  // +/- buttons (event delegation)
-  document.addEventListener('click', (ev) => {
-    const btn = ev.target.closest('.tallyBtn');
-    if (!btn) return;
-
-    const controls = btn.closest('.tallyControls');
-    if (!controls) return;
-
-    const input = controls.querySelector('.tallyInput');
-    if (!input) return;
-
-    let val = Number(String(input.value || '0').replace(/[^0-9]/g,'')) || 0;
-
-    if (btn.classList.contains('plus')) val += 1;
-    if (btn.classList.contains('minus')) val = Math.max(0, val - 1);
-
-    input.value = String(val);
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-  });
-
-  document.getElementById('refreshBtn').addEventListener('click', async () => {
-    try {
-      const data = await fetchTallies();
-      applyTallies(data.tallies || {});
-      setStatus('Up to date.');
-    } catch (e) {
-      setStatus('Refresh failed. Are you logged in?', true);
-    }
-  });
-
-  document.getElementById('saveAllBtn').addEventListener('click', async () => {
-    try {
-      const items = Array.from(document.querySelectorAll('tbody tr')).map(tr => {
-        const id = tr.dataset.id;
-        const val = Number(tr.querySelector('.tallyInput').value || '0');
-        return { monster_id: id, tally: val };
-      });
-      await saveMany(items);
-      setStatus('Saved all.');
-    } catch (e) {
-      setStatus('Save-all failed.', true);
-    }
-  });
-
-  document.getElementById('zeroVisibleBtn').addEventListener('click', () => {
-    for (const tr of visibleRows()) {
-      const input = tr.querySelector('.tallyInput');
-      input.value = '0';
-      pending.set(tr.dataset.id, 0);
-    }
-    setStatus('Zeroed visible. Saving…');
-    flushPending();
-  });
-
-  // Export/Import
-  document.getElementById('exportBtn').addEventListener('click', () => {
-    const obj = {};
-    for (const tr of document.querySelectorAll('tbody tr')) {
-      obj[tr.dataset.id] = Number(tr.querySelector('.tallyInput').value || '0');
-    }
-    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'monster_arena_tallies.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
-  document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
-  document.getElementById('importFile').addEventListener('change', async (ev) => {
-    const f = ev.target.files[0];
-    if (!f) return;
-    try {
-      const txt = await f.text();
-      const obj = JSON.parse(txt);
-      for (const tr of document.querySelectorAll('tbody tr')) {
-        const id = tr.dataset.id;
-        if (typeof obj[id] === 'number') tr.querySelector('.tallyInput').value = String(obj[id]);
-      }
-      setStatus('Imported. Saving…');
-      document.getElementById('saveAllBtn').click();
-    } catch (e) {
-      setStatus('Import failed. Bad JSON.', true);
-    }
-  });
-
-  // Initial load
-  (async function boot(){
-    try {
-      const data = await fetchTallies();
-      applyTallies(data.tallies || {});
-      setStatus('Ready.');
-    } catch (e) {
-      setStatus('Could not load from cloud. Are you logged in?', true);
-    }
-  })();
+upgradeTallies();
 </script>
 </body>
 </html>
