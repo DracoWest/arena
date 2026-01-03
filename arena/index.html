@@ -124,6 +124,38 @@
     tbody tr:hover td{background:#0a1323}
     td.lock{color:#d6e4ff}
     td.tally{width:140px}
+/* Tally +/- controls */
+.tallyControls{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  justify-content:flex-end;
+}
+.tallyBtn{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  border:1px solid #ffffff18;
+  background:linear-gradient(180deg, #1a263d, #0e1422);
+  color:var(--text);
+  cursor:pointer;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-weight:800;
+  line-height:1;
+  user-select:none;
+}
+.tallyBtn:hover{border-color:#ffffff28}
+.tallyBtn:active{transform:translateY(1px)}
+.tallyBtn.plus{
+  border-color:#00000033;
+  background:linear-gradient(180deg, #c3a46a, #9f814c);
+  color:#0b0f16;
+}
+
+/* Keep your existing .tallyInput styles, but make it fit with buttons */
+.tallyInput{
+  width:52px; /* key */
+}
 
     /* Tally controls */
     .tallyControls{
@@ -417,7 +449,34 @@ function applyFilters() {
       });
     }
   }
-  wireInputs();
+function upgradeTallyCells() {
+  for (const tr of document.querySelectorAll('tbody tr')) {
+    const td = tr.querySelector('td.tally');
+    if (!td) continue;
+
+    // Skip if already upgraded
+    if (td.querySelector('.tallyControls')) continue;
+
+    const input = td.querySelector('.tallyInput');
+    if (!input) continue;
+
+    const value = input.value || '0';
+
+td.innerHTML = `
+  <div class="tallyControls">
+    <button class="tallyBtn minus" type="button">−</button>
+    <input class="tallyInput" inputmode="numeric" value="${value}" />
+    <button class="tallyBtn plus" type="button">+</button>
+  </div>
+`;
+
+
+  }
+}
+
+upgradeTallyCells();
+wireInputs();
+
 
   // +/- buttons (event delegation)
   document.addEventListener('click', (ev) => {
