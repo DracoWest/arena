@@ -1,0 +1,1221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dracowest | Monster Arena Checklist</title>
+  <style>
+    :root {
+      --bg0:#06070a;
+      --bg1:#0b0f16;
+      --panel:#0f1623cc;
+      --line:#2b3e5a;
+      --gold:#b99a61;
+      --text:#d9e6ff;
+      --muted:#9bb0d6;
+      --danger:#ff6b6b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(1200px 600px at 50% 0%, #0b1630 0%, transparent 55%),
+        radial-gradient(900px 500px at 20% 40%, #0a2a3a22 0%, transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+      color:var(--text);
+      min-height:100vh;
+      padding:28px 18px;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    .header{
+      display:flex;gap:14px;align-items:flex-end;justify-content:space-between;
+      border:1px solid #ffffff12;
+      background:linear-gradient(180deg, #0f1726cc, #0b0f16cc);
+      box-shadow:0 18px 60px #00000066;
+      padding:18px 18px 14px 18px;
+      border-radius:16px;
+    }
+    .title{
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      font-size:26px;
+      color:var(--gold);
+      margin:0;
+    }
+    .sub{
+      margin:6px 0 0 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .right{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .pill{
+      border:1px solid #ffffff14;
+      background:#0c1220;
+      padding:8px 10px;
+      border-radius:999px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .btn{
+      border:1px solid #ffffff18;
+      background:linear-gradient(180deg, #1a263d, #0e1422);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-weight:600;
+    }
+    .btn:hover{border-color:#ffffff28}
+    .btn.gold{
+      background:linear-gradient(180deg, #c3a46a, #9f814c);
+      color:#0b0f16;
+      border-color:#00000033;
+    }
+    .controls{
+      margin-top:14px;
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+    }
+    .controlRow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    input[type="text"], select{
+      border:1px solid #ffffff18;
+      background:#0c1220;
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      outline:none;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      min-width:220px;
+    }
+    .panel{
+      margin-top:14px;
+      border:1px solid #ffffff12;
+      background:linear-gradient(180deg, #0f1726cc, #0b0f16cc);
+      box-shadow:0 18px 60px #00000066;
+      border-radius:16px;
+      overflow:hidden;
+    }
+    table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:13px;
+    }
+    thead th{
+      position:sticky; top:0;
+      background:#0b1322;
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      font-size:12px;
+      padding:12px 10px;
+      border-bottom:1px solid #ffffff14;
+      z-index:2;
+    }
+    tbody td{
+      padding:10px 10px;
+      border-bottom:1px solid #ffffff0f;
+      vertical-align:top;
+    }
+    tbody tr:hover td{background:#0a1323}
+    td.lock{color:#d6e4ff}
+    td.tally{width:120px}
+    .tallyInput{
+      width:100%;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid #ffffff18;
+      background:linear-gradient(180deg, #0f1a2f, #0a1020);
+      color:var(--text);
+      outline:none;
+      font-weight:700;
+      text-align:center;
+    }
+    .tallyInput:focus{border-color:var(--gold); box-shadow:0 0 0 3px #b99a6122}
+    .status{
+      margin-top:10px;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--muted);
+      font-size:12px;
+      min-height:18px;
+    }
+    .status.bad{color:var(--danger)}
+    .foot{
+      margin-top:16px;
+      color:#95a9cf;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      font-size:12px;
+      opacity:0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>
+        <h1 class="title">Monster Arena Checklist</h1>
+        <p class="sub">Editable: <b>Tally</b> only. Syncs across your phone and browsers.</p>
+      </div>
+      <div class="right">
+        <span class="pill" id="countPill">Loading…</span>
+        <button class="btn" id="refreshBtn">Refresh</button>
+        <button class="btn gold" id="saveAllBtn">Save All</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="controlRow">
+        <input id="search" type="text" placeholder="Search monsters, areas, types…" />
+        <select id="areaFilter">
+          <option value="">All areas</option>
+        </select>
+      </div>
+      <div class="controlRow">
+        <button class="btn" id="zeroVisibleBtn">Zero visible</button>
+        <button class="btn" id="exportBtn">Export tallies</button>
+        <button class="btn" id="importBtn">Import tallies</button>
+        <input id="importFile" type="file" accept="application/json" style="display:none" />
+      </div>
+    </div>
+
+    <div class="panel">
+      <div style="max-height:72vh; overflow:auto;">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>Area</th>
+              <th>Monster</th>
+              <th>Type</th>
+              <th>Location</th>
+              <th>Creations</th>
+              <th>Tally</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-id="besaid|dingo" data-area="Besaid">
+        <td class="lock">Besaid</td>
+        <td class="lock">Dingo</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="besaid|condor" data-area="Besaid">
+        <td class="lock">Besaid</td>
+        <td class="lock">Condor</td>
+        <td class="lock">Small Bird</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 5 for Pteryx</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="besaid|water_flan" data-area="Besaid">
+        <td class="lock">Besaid</td>
+        <td class="lock">Water Flan</td>
+        <td class="lock">Flan</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 3 for Jumbo Flan</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="kilika|dinonix" data-area="Kilika">
+        <td class="lock">Kilika</td>
+        <td class="lock">Dinonix</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="kilika|killer_bee" data-area="Kilika">
+        <td class="lock">Kilika</td>
+        <td class="lock">Killer Bee</td>
+        <td class="lock">Wasp</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 5 for Hornet</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="kilika|yellow_element" data-area="Kilika">
+        <td class="lock">Kilika</td>
+        <td class="lock">Yellow Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="kilika|ragora" data-area="Kilika">
+        <td class="lock">Kilika</td>
+        <td class="lock">Ragora</td>
+        <td class="lock">Plant</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|miihen_fang" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Mi&#x27;ihen Fang</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">All but Old Road</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|ipiria" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Ipiria</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Old road &amp; beginning of Mushroom Rock Road</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|floating_eye" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Floating Eye</td>
+        <td class="lock">Flying Eye</td>
+        <td class="lock">Anywhere fiends appear &amp; beginning of mushroom Rock Road</td>
+        <td class="lock">Need 5 for one eye</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|white_element" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">White Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|raldo" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Raldo</td>
+        <td class="lock">Armoured</td>
+        <td class="lock">All but Old Road</td>
+        <td class="lock">Need 3 for Tanket</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|voivre" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Voivre</td>
+        <td class="lock">Armoured Reptile</td>
+        <td class="lock">Old road &amp; beginning of Mushroom Rock Road</td>
+        <td class="lock">Need 5 for Fafnir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|bomb" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Bomb</td>
+        <td class="lock">Floating Bomb</td>
+        <td class="lock">Anywhere fiends appear &amp; beginning of mushroom Rock Road</td>
+        <td class="lock">Need 5 for Bomb King</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="miihen_highroad|dual_horn" data-area="Mi&#x27;ihen Highroad">
+        <td class="lock">Mi&#x27;ihen Highroad</td>
+        <td class="lock">Dual Horn</td>
+        <td class="lock">Horn Beast</td>
+        <td class="lock">Anywhere fiends appear &amp; beginning of mushroom Rock Road</td>
+        <td class="lock">Need 5 for Juggernaut</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|raptor" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Raptor</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Road to Staging Area + Battle Area</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|gandarewa" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Gandarewa</td>
+        <td class="lock">Floating Imp</td>
+        <td class="lock">Road to Staging Area + Battle Area</td>
+        <td class="lock">Need 5 for Vidatu</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|thunder_flan" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Thunder Flan</td>
+        <td class="lock">Flan</td>
+        <td class="lock">Road to Staging Area + Battle Area &amp; Mi&#x27;ihen Old Road</td>
+        <td class="lock">Need 3 for Jumbo Flan</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|red_element" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Red Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Road to Staging Area + Battle Area</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|lamashtu" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Lamashtu</td>
+        <td class="lock">Armoured Reptile</td>
+        <td class="lock">Road to Staging Area + Battle Area</td>
+        <td class="lock">Need 5 for Fafnir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|funguar" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Funguar</td>
+        <td class="lock">Fungus</td>
+        <td class="lock">Road to Staging Area + Battle Area</td>
+        <td class="lock">Need 5 for Sleep Sprout</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mushroom_rock_road|garuda" data-area="Mushroom Rock Road">
+        <td class="lock">Mushroom Rock Road</td>
+        <td class="lock">Garuda</td>
+        <td class="lock">Huge Bird</td>
+        <td class="lock">Road to Staging Area + Battle Area</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|garm" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Garm</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">All but Battle Area</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|simurgh" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Simurgh</td>
+        <td class="lock">Small Bird</td>
+        <td class="lock">Near the crossroads of the temple and forest at the end of the first road. HARD TO FIND.</td>
+        <td class="lock">Need 5 for Pteryx</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|bite_bug" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Bite Bug</td>
+        <td class="lock">Wasp</td>
+        <td class="lock">All but Battle Area, easier to find in forested area</td>
+        <td class="lock">Need 5 for Hornet</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|snow_flan" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Snow Flan</td>
+        <td class="lock">Flan</td>
+        <td class="lock">All but Battle Area</td>
+        <td class="lock">Need 3 for Jumbo Flan</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|bunyip" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Bunyip</td>
+        <td class="lock">Armoured</td>
+        <td class="lock">All but Battle Area</td>
+        <td class="lock">Need 3 for Tanket</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|basilisk" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Basilisk</td>
+        <td class="lock">Petrify Snake</td>
+        <td class="lock">Road between staging area and temple</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="djose|ochu" data-area="Djose">
+        <td class="lock">Djose</td>
+        <td class="lock">Ochu</td>
+        <td class="lock">Huge Plant</td>
+        <td class="lock">Forested Area</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|melusine" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Melusine</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|aerouge" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Aerouge</td>
+        <td class="lock">Imp</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 5 for Vidatu</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|buer" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Buer</td>
+        <td class="lock">Flying Eye</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 5 for One Eye</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|gold_element" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Gold Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|kusiraqqu" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Kusiraqqu</td>
+        <td class="lock">Armoured Reptile</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 5 for Fafnir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|larva" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Larva</td>
+        <td class="lock">Larva</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|iron_giant" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Iron Giant</td>
+        <td class="lock">Iron Giant</td>
+        <td class="lock">Area After Rin&#x27;s Agency</td>
+        <td class="lock">Need 10 for Iron Clad</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="thunder_plains|quactuar" data-area="Thunder Plains">
+        <td class="lock">Thunder Plains</td>
+        <td class="lock">Quactuar</td>
+        <td class="lock">Cactuar</td>
+        <td class="lock">Approach 1-3 glowing Quactuar stones and press Square to make them appear as a random encounter across the plains</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|snow_wolf" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Snow Wolf</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">Lake Macalania - Snow Areas</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|iguion" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Iguion</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Macalania Wood Areas</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|wasp" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Wasp</td>
+        <td class="lock">Wasp</td>
+        <td class="lock">Macalania Wood Areas</td>
+        <td class="lock">Need 5 for Hornet</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|evil_eye" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Evil Eye</td>
+        <td class="lock">Flying Eye</td>
+        <td class="lock">Lake Macalania - Snow Areas</td>
+        <td class="lock">Need 5 for One Eye</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|ice_flan" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Ice Flan</td>
+        <td class="lock">Flan</td>
+        <td class="lock">Lake Macalania - Snow Areas</td>
+        <td class="lock">Need 3 for Jumbo Flan</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|blue_element" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Blue Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Macalania Wood Areas</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|murussu" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Murussu</td>
+        <td class="lock">Armored</td>
+        <td class="lock">Macalania Wood Areas</td>
+        <td class="lock">Need 3 for Tanket</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|mafdet" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Mafdet</td>
+        <td class="lock">Armored</td>
+        <td class="lock">Lake Macalania - Snow Areas</td>
+        <td class="lock">Need 3 for Tanket</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|xiphos" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Xiphos</td>
+        <td class="lock">Large Lizard</td>
+        <td class="lock">Macalania Wood Areas</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="macalania|chimera" data-area="Macalania">
+        <td class="lock">Macalania</td>
+        <td class="lock">Chimera</td>
+        <td class="lock">Chimera</td>
+        <td class="lock">Macalania Wood Areas</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="bikanel|sand_wolf" data-area="Bikanel">
+        <td class="lock">Bikanel</td>
+        <td class="lock">Sand Wolf</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="bikanel|alcyone" data-area="Bikanel">
+        <td class="lock">Bikanel</td>
+        <td class="lock">Alcyone</td>
+        <td class="lock">Small Bird</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 5 for Pteryx</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="bikanel|mushusuu" data-area="Bikanel">
+        <td class="lock">Bikanel</td>
+        <td class="lock">Mushusuu</td>
+        <td class="lock">Armored Reptile</td>
+        <td class="lock">Anywhere fiends appear</td>
+        <td class="lock">Need 5 for Fafnir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="bikanel|zu" data-area="Bikanel">
+        <td class="lock">Bikanel</td>
+        <td class="lock">Zu</td>
+        <td class="lock">Giant Bird</td>
+        <td class="lock">Anywhere fiends appear - Easier to find in the ruins to the west in the Sanubia Desert - Central Area</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="bikanel|sand_worm" data-area="Bikanel">
+        <td class="lock">Bikanel</td>
+        <td class="lock">Sand Worm</td>
+        <td class="lock">Big Worm</td>
+        <td class="lock">Anywhere fiends appear - Easier to find in the ruins to the west in the Sanubia Desert - Central Area</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="bikanel|cactuar" data-area="Bikanel">
+        <td class="lock">Bikanel</td>
+        <td class="lock">Cactuar</td>
+        <td class="lock">Cactuar</td>
+        <td class="lock">Anywhere Fiends appear - However, you are guaranteed to face 9 whilst completing Rikku&#x27;s quest for the Mercury Sigil (Unlocking Cactuar Village)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|skoll" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Skoll</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">Most areas except North West (Near Caladbolg Location)</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|neribos" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Neribos</td>
+        <td class="lock">Wasp</td>
+        <td class="lock">Most areas except North West (Near Caladbolg Location)</td>
+        <td class="lock">Need 5 for Hornet</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|flame_flan" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Flame Flan</td>
+        <td class="lock">Flan</td>
+        <td class="lock">Most areas except North West (Near Caladbolg Location)</td>
+        <td class="lock">Need 3 for Jumbo Flan</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|shred" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Shred</td>
+        <td class="lock">Armored</td>
+        <td class="lock">Most areas except North West (Near Caladbolg Location)</td>
+        <td class="lock">Need 3 for Tanket</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|anacondaur" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Anacondaur</td>
+        <td class="lock">Petrify Snake</td>
+        <td class="lock">Most areas - More common to the North West (Near Caladbolg Location)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|ogre" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Ogre</td>
+        <td class="lock">Ogre</td>
+        <td class="lock">Most areas - More common to the North West and behind Rin&#x27;s travel agency</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|coeurl" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Coeurl</td>
+        <td class="lock">Leopard</td>
+        <td class="lock">Most areas - Also found in Cavern of the Stolen Fayth (Sunken Cave)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|chimera_brain" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Chimera Brain</td>
+        <td class="lock">Chimera</td>
+        <td class="lock">Most areas - More common to the North West (Near Caladbolg Location)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="calm_lands|malboro" data-area="Calm Lands">
+        <td class="lock">Calm Lands</td>
+        <td class="lock">Malboro</td>
+        <td class="lock">Malboro</td>
+        <td class="lock">Most areas - More common to the North West (Near Caladbolg Location) - Also found in Cavern of the Stolen Fayth (Sunken Cave)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|yowie" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Yowie</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave)</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|imp" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Imp</td>
+        <td class="lock">Imp</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave) - Also Appears on Mt. Gagazet</td>
+        <td class="lock">Need 5 for Vidatu</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|dark_element" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Dark Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave)</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|nidhogg" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Nidhogg</td>
+        <td class="lock">Amored Reptile</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave) - Also Appears on Mt. Gagazet</td>
+        <td class="lock">Need 5 for Fafnir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|thorn" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Thorn</td>
+        <td class="lock">Fungus</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave)</td>
+        <td class="lock">Need 5 for Sleep Sprout</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|valaha" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Valaha</td>
+        <td class="lock">Horn Beast</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave)</td>
+        <td class="lock">Need 5 for Juggernaut</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|epaaj" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Epaaj</td>
+        <td class="lock">Large Lizard</td>
+        <td class="lock">Anywhere Fiends Appear (Outside &amp; Inside Cave)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|ghost" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Ghost</td>
+        <td class="lock">Ghost</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="sunken_cave|tonberry" data-area="Sunken Cave">
+        <td class="lock">Sunken Cave</td>
+        <td class="lock">Tonberry</td>
+        <td class="lock">Tonberry</td>
+        <td class="lock">Anywhere Fiends Appear (Inside Cave) - Some claim the end room &amp; Green room halfway through the cave yield better results, but this isnt 100% confirmed - RARE CREATURE</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|bandersnatch" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Bandersnatch</td>
+        <td class="lock">Lupine</td>
+        <td class="lock">On the Mountain Path &amp; in the caves</td>
+        <td class="lock">Need 3 for Fenrir</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|grat" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Grat</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">On the Mountain Path</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|bashura" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Bashura</td>
+        <td class="lock">Ogre</td>
+        <td class="lock">On the Mountain Path, in the Caves &amp; in Zanarkand ruins (before dome)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|grenade" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Grenade</td>
+        <td class="lock">Floating Bomb</td>
+        <td class="lock">On the Mountain Path</td>
+        <td class="lock">Need 5 for Bomb King</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|splasher" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Splasher</td>
+        <td class="lock">Piranha</td>
+        <td class="lock">Cave - Water Areas</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|achelous" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Achelous</td>
+        <td class="lock">Water Creature</td>
+        <td class="lock">Cave - Water Areas</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|maelspike" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Maelspike</td>
+        <td class="lock">Armored Fish</td>
+        <td class="lock">Cave - Water Areas</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|ahriman" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Ahriman</td>
+        <td class="lock">Floating Eye</td>
+        <td class="lock">Caves &amp; in Zanarkand Ruins (before dome)</td>
+        <td class="lock">Need 5 for One Eye</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|grendel" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Grendel</td>
+        <td class="lock">Horn Beast</td>
+        <td class="lock">Caves &amp; in Zanarkand Ruins (before dome)</td>
+        <td class="lock">Need 5 for Juggernaut</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|mandragora" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Mandragora</td>
+        <td class="lock">Huge Plant</td>
+        <td class="lock">Caves &amp; in Zanarkand Ruins (before dome)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|behemoth" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Behemoth</td>
+        <td class="lock">Behemoth</td>
+        <td class="lock">Caves &amp; in Zanarkand Ruins (before dome)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="mt._gagazet|dark_flan" data-area="Mt. Gagazet">
+        <td class="lock">Mt. Gagazet</td>
+        <td class="lock">Dark Flan</td>
+        <td class="lock">Flan</td>
+        <td class="lock">Caves &amp; in Zanarkand Ruins (before dome)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|exoray" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Exoray</td>
+        <td class="lock">Fungus</td>
+        <td class="lock">Both Areas</td>
+        <td class="lock">Need 5 for sleep sprout</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|wraith" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Wraith</td>
+        <td class="lock">Ghost</td>
+        <td class="lock">Second Area (After the steps) &amp; Omega ruins</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|gemini_a" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Gemini A</td>
+        <td class="lock">Iron Giant</td>
+        <td class="lock">Both Areas &amp; Omega Ruins before Omega</td>
+        <td class="lock">Need 10 for Iron Clad</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|gemini_b" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Gemini B</td>
+        <td class="lock">Iron Giant</td>
+        <td class="lock">Both Areas &amp; Omega Ruins before Omega</td>
+        <td class="lock">Need 10 for Iron Clad</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|demonolith" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Demonolith</td>
+        <td class="lock">Monolith</td>
+        <td class="lock">Second Area (After the steps) &amp; Omega ruins</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|great_malboro" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Great Malboro</td>
+        <td class="lock">Malboro</td>
+        <td class="lock">Second Area (After the steps) &amp; Omega ruins</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|barbatos" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Barbatos</td>
+        <td class="lock">Armoured Creature</td>
+        <td class="lock">Second Area (After the steps)</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|adamantoise" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Adamantoise</td>
+        <td class="lock">Amoured tortoise</td>
+        <td class="lock">First Area &amp; Omega Ruins</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="inside_sin|behemoth_king" data-area="Inside Sin">
+        <td class="lock">Inside Sin</td>
+        <td class="lock">Behemoth King</td>
+        <td class="lock">Behemoth</td>
+        <td class="lock">First &amp; Second Area</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|zaurus" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Zaurus</td>
+        <td class="lock">Fast Lizard</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 3 for Ornitholestes</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|floating_death" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Floating Death</td>
+        <td class="lock">Floating eye</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 5 for One Eye</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|black_element" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Black Element</td>
+        <td class="lock">Elemental</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 3 for Nega Elemental</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|halma" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Halma</td>
+        <td class="lock">Armoured</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 3 for Tanket</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|demonolith" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Demonolith</td>
+        <td class="lock">Monolith</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock">Need 5 for Bomb King</td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|spirit" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Spirit</td>
+        <td class="lock">Larva</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|machea" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Machea</td>
+        <td class="lock">Large Lizard</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|master_coeurl" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Master Coeurl</td>
+        <td class="lock">Leopard</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|master_tonberry" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Master Tonberry</td>
+        <td class="lock">Tonberry</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+<tr data-id="omega_ruins|varuna" data-area="Omega Ruins">
+        <td class="lock">Omega Ruins</td>
+        <td class="lock">Varuna</td>
+        <td class="lock">Demon</td>
+        <td class="lock">Anywhere Fiends Appear</td>
+        <td class="lock"></td>
+        <td class="tally"><input inputmode="numeric" pattern="[0-9]*" class="tallyInput" value="0" /></td>
+      </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="status" id="status"></div>
+    <div class="foot">Tip: changes autosave after you stop typing for a second. “Save All” forces a full sync.</div>
+  </div>
+
+<script>
+  const STATUS = document.getElementById('status');
+  const COUNT = document.getElementById('countPill');
+
+  const debounce = (fn, ms) => {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), ms);
+    };
+  };
+
+  function setStatus(msg, bad=false) {
+    STATUS.textContent = msg;
+    STATUS.className = bad ? 'status bad' : 'status';
+  }
+
+  function visibleRows() {
+    return Array.from(document.querySelectorAll('tbody tr')).filter(tr => tr.style.display !== 'none');
+  }
+
+  function updateCountPill() {
+    const total = document.querySelectorAll('tbody tr').length;
+    const vis = visibleRows().length;
+    COUNT.textContent = `${vis} / ${total} shown`;
+  }
+
+  function applyFilters() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    const area = document.getElementById('areaFilter').value;
+    for (const tr of document.querySelectorAll('tbody tr')) {
+      const hay = (tr.innerText || '').toLowerCase();
+      const okQ = !q || hay.includes(q);
+      const okA = !area || tr.dataset.area === area;
+      tr.style.display = (okQ && okA) ? '' : 'none';
+    }
+    updateCountPill();
+  }
+
+  document.getElementById('search').addEventListener('input', applyFilters);
+  document.getElementById('areaFilter').addEventListener('change', applyFilters);
+
+  // Build area filter options
+  (function initAreas(){
+    const areas = new Set(Array.from(document.querySelectorAll('tbody tr')).map(tr => tr.dataset.area));
+    const sel = document.getElementById('areaFilter');
+    Array.from(areas).sort().forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a;
+      opt.textContent = a;
+      sel.appendChild(opt);
+    });
+    updateCountPill();
+  })();
+
+  // ---- Sync layer (Cloudflare Pages Functions -> Supabase) ----
+  async function fetchTallies() {
+    setStatus('Syncing from cloud…');
+    const res = await fetch('/api/arena/tallies', { credentials:'include' });
+    if (!res.ok) throw new Error('Fetch failed');
+    return await res.json();
+  }
+
+  async function saveOne(monster_id, tally) {
+    const res = await fetch('/api/arena/tally', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials:'include',
+      body: JSON.stringify({ monster_id, tally })
+    });
+    if (!res.ok) throw new Error('Save failed');
+  }
+
+  async function saveMany(items) {
+    const res = await fetch('/api/arena/tallies', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials:'include',
+      body: JSON.stringify({ items })
+    });
+    if (!res.ok) throw new Error('Save-all failed');
+  }
+
+  function applyTallies(map) {
+    for (const tr of document.querySelectorAll('tbody tr')) {
+      const id = tr.dataset.id;
+      const v = map[id];
+      if (typeof v === 'number') {
+        tr.querySelector('.tallyInput').value = String(v);
+      }
+    }
+  }
+
+  let pending = new Map(); // monster_id -> tally
+  const flushPending = debounce(async () => {
+    if (pending.size === 0) return;
+    const items = Array.from(pending.entries()).map(([monster_id, tally]) => ({ monster_id, tally }));
+    pending.clear();
+    try {
+      await saveMany(items);
+      setStatus('Saved.');
+    } catch (e) {
+      setStatus('Save failed. Check your connection.', true);
+    }
+  }, 900);
+
+  // Input wiring
+  for (const input of document.querySelectorAll('.tallyInput')) {
+    input.addEventListener('input', (ev) => {
+      const tr = ev.target.closest('tr');
+      const id = tr.dataset.id;
+      const raw = String(ev.target.value || '').replace(/[^0-9]/g,'');
+      ev.target.value = raw || '0';
+      const val = Number(ev.target.value || '0');
+      pending.set(id, val);
+      setStatus('Typing…');
+      flushPending();
+    });
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', async () => {
+    try {
+      const data = await fetchTallies();
+      applyTallies(data.tallies || {});
+      setStatus('Up to date.');
+    } catch (e) {
+      setStatus('Refresh failed. Are you logged in?', true);
+    }
+  });
+
+  document.getElementById('saveAllBtn').addEventListener('click', async () => {
+    try {
+      const items = Array.from(document.querySelectorAll('tbody tr')).map(tr => {
+        const id = tr.dataset.id;
+        const val = Number(tr.querySelector('.tallyInput').value || '0');
+        return { monster_id: id, tally: val };
+      });
+      await saveMany(items);
+      setStatus('Saved all.');
+    } catch (e) {
+      setStatus('Save-all failed.', true);
+    }
+  });
+
+  document.getElementById('zeroVisibleBtn').addEventListener('click', () => {
+    for (const tr of visibleRows()) {
+      const input = tr.querySelector('.tallyInput');
+      input.value = '0';
+      pending.set(tr.dataset.id, 0);
+    }
+    setStatus('Zeroed visible. Saving…');
+    flushPending();
+  });
+
+  // Export/Import
+  document.getElementById('exportBtn').addEventListener('click', () => {
+    const obj = {};
+    for (const tr of document.querySelectorAll('tbody tr')) {
+      obj[tr.dataset.id] = Number(tr.querySelector('.tallyInput').value || '0');
+    }
+    const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'monster_arena_tallies.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+  document.getElementById('importFile').addEventListener('change', async (ev) => {
+    const f = ev.target.files[0];
+    if (!f) return;
+    try {
+      const txt = await f.text();
+      const obj = JSON.parse(txt);
+      for (const tr of document.querySelectorAll('tbody tr')) {
+        const id = tr.dataset.id;
+        if (typeof obj[id] === 'number') tr.querySelector('.tallyInput').value = String(obj[id]);
+      }
+      setStatus('Imported. Saving…');
+      document.getElementById('saveAllBtn').click();
+    } catch (e) {
+      setStatus('Import failed. Bad JSON.', true);
+    }
+  });
+
+  // Initial load
+  (async function boot(){
+    try {
+      const data = await fetchTallies();
+      applyTallies(data.tallies || {});
+      setStatus('Ready.');
+    } catch (e) {
+      setStatus('Could not load from cloud. Are you logged in?', true);
+    }
+  })();
+</script>
+</body>
+</html>
