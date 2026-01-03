@@ -1,29 +1,52 @@
 export async function onRequest(context) {
   const url = new URL(context.request.url);
-  const path = url.pathname;
 
-  // Allow login endpoint always
-  if (path.startsWith("/arena/login")) {
-    return context.next();
+  // Login page + login POST
+  if (url.pathname === "/arena/login") {
+    return handleLogin(context);
   }
 
-  // Check auth cookie
-  const cookie = context.request.headers.get("Cookie") || "";
-  const authed = cookie.includes("dw_arena=1");
-
-  // Root path: redirect only if already authed
-  if (path === "/") {
-    if (authed) {
-      return Response.redirect(`${url.origin}/arena/`, 302);
-    }
-    // Not authed: stay on 404 root (no redirect)
-    return new Response(null, { status: 404 });
+  // Protect API
+  if (url.pathname.startsWith("/api/arena")) {
+    return requireAuth(context);
   }
 
-  // Protect arena pages
-  if (path.startsWith("/arena") && !authed) {
-    return Response.redirect(`${url.origin}/arena/login`, 302);
+  // Protect /arena/*
+  if (url.pathname.startsWith("/arena")) {
+    return requireAuth(context);
   }
 
   return context.next();
 }
+
+function isAuthed(req) {
+  const cookie = req.headers.get("Cookie") || "";
+  return cookie.includes("dw_arena=1");
+}
+
+async function requireAuth(context) {
+  if (isAuthed(context.request)) return context.next();
+
+  // Send people to the login form (not the site root)
+  const url = new URL(context.request.url);
+  return Response.redirect(new URL("/arena/login", url.origin).toString(), 302);
+}
+
+function loginPage(message = "") {
+  // Minimal “FFX-ish” vibe without external assets
+  return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DracoWest | Arena Login</title>
+  <style>
+    :root{
+      --bg0:#05060a; --bg1:#0b0f1e;
+      --gold:#c9a24a; --gold2:#8d6a1f;
+      --text:#e8ecff; --muted:#aab2d8;
+    }
+    body{
+      margin:0; min-height:100vh; display:grid; place-items:center;
+      background:radial-gradient(1200px 600px at 50% 25%, #141a3a 0%, var(--bg0) 55%, #000 100%);
+      color:var(--text); font-family:system-ui,-appl
